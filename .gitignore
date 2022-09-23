@@ -61,8 +61,6 @@ typings/
 .next
 
 # model files
-public/model/model.json
-public/model/*shard*
 
 .DS_Store
 dist/
