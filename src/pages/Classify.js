@@ -8,7 +8,7 @@ import Cropper  from 'react-cropper';
 import * as tf from '@tensorflow/tfjs';
 import LoadButton from '../components/LoadButton';
 import { MODEL_CLASSES } from '../model/classes';
-import config from '../config';
+// import config from '../config';
 import './Classify.css';
 import 'cropperjs/dist/cropper.css';
 
@@ -58,21 +58,21 @@ export default class Classify extends Component {
         // Get the date when the model was saved.
         try {
           const db = await openDB(INDEXEDDB_DB, 1, );
-          const item = await db.transaction(INDEXEDDB_STORE)
+          await db.transaction(INDEXEDDB_STORE)
                                .objectStore(INDEXEDDB_STORE)
                                .get(INDEXEDDB_KEY);
-          const dateSaved = new Date(item.modelArtifactsInfo.dateSaved);
-          await this.getModelInfo();
-          console.log(this.modelLastUpdated);
-          if (!this.modelLastUpdated  || dateSaved >= new Date(this.modelLastUpdated).getTime()) {
-            console.log('Using saved model');
-          }
-          else {
-            this.setState({
-              modelUpdateAvailable: true,
-              showModelUpdateAlert: true,
-            });
-          }
+          // const dateSaved = new Date(item.modelArtifactsInfo.dateSaved);
+          // await this.getModelInfo();
+          // console.log(this.modelLastUpdated);
+          // if (!this.modelLastUpdated  || dateSaved >= new Date(this.modelLastUpdated).getTime()) {
+          //   console.log('Using saved model');
+          // }
+          // else {
+          //   this.setState({
+          //     modelUpdateAvailable: true,
+          //     showModelUpdateAlert: true,
+          //   });
+          // }
 
         }
         catch (error) {
@@ -91,10 +91,10 @@ export default class Classify extends Component {
       }
     }
     // If no IndexedDB, then just download like normal.
-    else {
-      console.warn('IndexedDB not supported.');
-      this.model = await tf.loadLayersModel(MODEL_PATH);
-    }
+    // else {
+    //   console.warn('IndexedDB not supported.');
+    //   this.model = await tf.loadLayersModel(MODEL_PATH);
+    // }
 
     this.setState({ modelLoaded: true });
     this.initWebcam();
@@ -142,22 +142,22 @@ export default class Classify extends Component {
     }
   }
 
-  getModelInfo = async () => {
-    await fetch(`${config.API_ENDPOINT}/model_info`, {
-      method: 'GET',
-    })
-    .then(async (response) => {
-      await response.json().then((data) => {
-        this.modelLastUpdated = data.last_updated;
-      })
-      .catch((err) => {
-        console.log('Unable to get parse model info.');
-      });
-    })
-    .catch((err) => {
-      console.log('Unable to get model info');
-    });
-  }
+  // getModelInfo = async () => {
+  //   await fetch(`${config.API_ENDPOINT}/model_info`, {
+  //     method: 'GET',
+  //   })
+  //   .then(async (response) => {
+  //     await response.json().then((data) => {
+  //       this.modelLastUpdated = data.last_updated;
+  //     })
+  //     .catch((err) => {
+  //       console.log('Unable to get parse model info.');
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log('Unable to get model info');
+  //   });
+  // }
 
   updateModel = async () => {
     // Get the latest model from the server and refresh the one saved in IndexedDB.
